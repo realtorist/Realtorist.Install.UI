@@ -1,0 +1,305 @@
+<ngx-one-column-layout>
+    <nb-card>
+        <nb-card-body>
+            <nb-stepper #stepper
+                        [nbSpinner]="isInstalling">
+                <nb-step label="Welcome">
+                    <h4>Welcome to the Realtorist installation!</h4>
+                    <p>
+                        Thank you for choosing Realtorist as the engine for your Website.
+                    </p>
+                    <p>
+                        Please follow the steps and complete the basic installation. After the installation is complete,
+                        please remove the installation extension from your Realtorist package and restart the Realtorist
+                        instance.
+                    </p>
+                    <p>
+                        <strong>Please note:</strong> This installation is only a basic configuration in order to make
+                        your Realtorist website up and running without errors during the startup. After the
+                        installation, please go to the admin panel and complete all changes that you want to do with
+                        your website.
+                    </p>
+                    <div class="row">
+                        <div class="col-6">
+                            <button nbButton
+                                    disabled
+                                    nbStepperPrevious>Previous step</button>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button nbButton
+                                    nbStepperNext>Next step</button>
+                        </div>
+                    </div>
+                </nb-step>
+                <nb-step [completed]="websiteSettingsForm.isValid"
+                         label="Website settings">
+                    <form #websiteSettingsForm="ngForm"
+                          (ngSubmit)="$event.preventDefault()"
+                          class="step-container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Website name</label>
+                                    <input type="text"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Website name"
+                                           name="websiteName"
+                                           [(ngModel)]="model.websiteName"
+                                           #websiteName="ngModel"
+                                           required />
+                                    <div *ngIf="websiteName.invalid && (websiteName.dirty || websiteName.touched)"
+                                         class="errors">
+                                        <div *ngIf="websiteName.errors?.required">Website name should not be empty</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Website address</label>
+                                    <input type="text"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Website address"
+                                           name="websiteAddress"
+                                           [(ngModel)]="model.websiteAddress"
+                                           #websiteAddress="ngModel"
+                                           pattern="^[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}$"
+                                           required />
+                                    <div *ngIf="websiteAddress.invalid && (websiteAddress.dirty || websiteAddress.touched)"
+                                         class="errors">
+                                        <div *ngIf="websiteAddress.errors?.required">Website address should not be empty
+                                        </div>
+                                        <div *ngIf="websiteAddress.errors?.pattern">Website address is not a valid
+                                            domain name</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Website title</label>
+                                    <input type="text"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Website title"
+                                           name="websiteTitle"
+                                           [(ngModel)]="model.websiteTitle"
+                                           #websiteTitle="ngModel"
+                                           required />
+                                    <div *ngIf="websiteTitle.invalid && (websiteTitle.dirty || websiteTitle.touched)"
+                                         class="errors">
+                                        <div *ngIf="websiteTitle.errors?.required">Website title should not be empty
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label"
+                                           for="input-timezone">Time zone</label>
+                                    <input nbInput
+                                           [(ngModel)]="model.timezone"
+                                           #timezone="ngModel"
+                                           type="text"
+                                           id="input-timezone"
+                                           name="timezone"
+                                           placeholder="Time zone"
+                                           fullWidth
+                                           fieldSize="large"
+                                           [nbAutocomplete]="timeZoneAutoComplete"
+                                           [focusInputOnValueChange]="false"
+                                           required>
+                                    <ng-container *ngIf="timezone.invalid && timezone.touched">
+                                        <p class="errors"
+                                           *ngIf="timezone.errors?.required">
+                                            Time zone is required!
+                                        </p>
+                                    </ng-container>
+                                    <p class="errors"
+                                       *ngIf="timezone.touched && !isValidTimezone()">
+                                        Unknown time zone!
+                                    </p>
+                                    <nb-autocomplete #timeZoneAutoComplete>
+                                
+                                        <nb-option *ngFor="let timezone of getFilteredOptions(timezones, model.timezone)"
+                                                   [value]="timezone">
+                                            {{ timezone }}
+                                        </nb-option>
+                                
+                                    </nb-autocomplete>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <button nbButton
+                                        nbStepperPrevious>Previous step</button>
+                            </div>
+                            <div class="col-6 text-right">
+                                <button nbButton
+                                        nbStepperNext>Next step</button>
+                            </div>
+                        </div>
+                    </form>
+                </nb-step>
+                <nb-step [completed]="profileSettingsForm.isValid"
+                         label="User settings">
+                    <form #profileSettingsForm="ngForm"
+                          (ngSubmit)="$event.preventDefault()"
+                          class="step-container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">First name</label>
+                                    <input type="text"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="First name"
+                                           name="firstName"
+                                           [(ngModel)]="model.firstName"
+                                           #firstName="ngModel"
+                                           required />
+                                    <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+                                         class="errors">
+                                        <div *ngIf="firstName.errors?.required">First name should not be empty</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Last name</label>
+                                    <input type="text"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Last name"
+                                           name="lastName"
+                                           [(ngModel)]="model.lastName"
+                                           #lastName="ngModel"
+                                           required />
+                                    <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+                                         class="errors">
+                                        <div *ngIf="lastName.errors?.required">Last name should not be empty</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Email address</label>
+                                    <input type="email"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Email address"
+                                           name="emailAddress"
+                                           [(ngModel)]="model.emailAddress"
+                                           #emailAddress="ngModel"
+                                           email
+                                           required />
+                                    <div *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched)"
+                                         class="errors">
+                                        <div *ngIf="emailAddress.errors?.required">Email address should not be empty</div>
+                                        <div *ngIf="emailAddress.errors?.email">Email address is not a valid email</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <button nbButton
+                                        nbStepperPrevious>Previous step</button>
+                            </div>
+                            <div class="col-6 text-right">
+                                <button nbButton
+                                        nbStepperNext>Next step</button>
+                            </div>
+                        </div>
+                    </form>
+                </nb-step>
+                <nb-step [completed]="passwordSettingsForm.isValid"
+                         label="Password settings">
+                    <form #passwordSettingsForm="ngForm"
+                          (ngSubmit)="$event.preventDefault()"
+                          class="step-container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Password</label>
+                                    <input type="password"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Password"
+                                           name="firstName"
+                                           [(ngModel)]="model.password"
+                                           #password="ngModel"
+                                           minlength="6"
+                                           required />
+                                    <div *ngIf="password.invalid && (password.dirty || password.touched)"
+                                         class="errors">
+                                        <div *ngIf="password.errors?.required">Password should not be empty</div>
+                                        <div *ngIf="password.errors?.minlength">Password should be at least 6 symbols
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="label">Confirm password</label>
+                                    <input type="password"
+                                           nbInput
+                                           fullWidth
+                                           placeholder="Confirm password"
+                                           name="firstName"
+                                           [(ngModel)]="model.confirmPassword"
+                                           #confirmPassword="ngModel"
+                                           minlength="6"
+                                           required />
+                                    <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)"
+                                         class="errors">
+                                        <div *ngIf="confirmPassword.errors?.required">Confirm password should not be
+                                            empty</div>
+                                        <div *ngIf="confirmPassword.errors?.minlength">Password should be at least 6
+                                            symbols</div>
+                                    </div>
+                                    <div *ngIf="model.confirmPassword != model.password" class="errors">Passwords don't match!
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <button nbButton
+                                            nbStepperPrevious>Previous step</button>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <button nbButton
+                                            (click)="install()">Complete installation</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </nb-step>
+                <nb-step [hidden]="true"
+                         label="Installation completed!">
+                    <div class="step-container">
+                        <h4>Yay!</h4>
+                        <p>You have succesfully completed the installation process. Please remove the installation
+                            extension from your Realtorist package and restart the Realtorist instance.</p>
+                    </div>
+                </nb-step>
+            </nb-stepper>
+        </nb-card-body>
+    </nb-card>
+</ngx-one-column-layout>
