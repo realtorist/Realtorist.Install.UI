@@ -5,16 +5,11 @@
 
 // framework component themes (styles tied to theme variables)
 @import '~@nebular/theme/styles/globals';
-@import '~@nebular/auth/styles/globals';
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/grid';
-
-@import '~codemirror/lib/codemirror';
-@import '~codemirror/addon/hint/show-hint';
-@import '~codemirror/theme/neat';
 
 // loading progress bar theme
 @import './pace.theme';
@@ -28,7 +23,6 @@
 
   // framework global styles
   @include nb-theme-global();
-  @include nb-auth-global();
 
   @include ngx-layout();
   // loading progress bar
