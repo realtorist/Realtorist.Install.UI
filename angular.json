@@ -37,8 +37,6 @@
             "scripts": [
               "src/assets/js/pace.options.js",
               "node_modules/pace-js/pace.min.js"
-            ],
-            "allowedCommonJsDependencies": [
             ]
           },
           "configurations": {
